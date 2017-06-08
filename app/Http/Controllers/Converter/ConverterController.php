@@ -11,43 +11,35 @@ use SimpleXMLElement;
 class ConverterController extends Controller
 {
     public function doConverten(Request $request){
-        //dd($request);
-       // dd(Input::all());
-      //  $validate =['file' => 'mimes: application/vnd.ms-excel, text/xml, application/octet-stream'];
-   //     $validate =['file' => 'mimes:csv',];
-  //      $this->validate($request, $validate);
 
 
         $contents1 = File::get($request->file('file'));
+        $fileName = explode('.',$request->file('file')->getClientOriginalName());
+        dd($request->converteType);
 
-        $row = 0;
-        while (($data = fgetcsv($contents1, 1000, ",")) !== FALSE) {
+        switch ($fileName[1]) {
 
-            // edit for number of horisontal fields
-            $data2["person1"][$row] = $data[0];
-            $data2["person2"][$row] = $data[1];
-            $data2["person3"][$row] = $data[2];
+            case 'json':
+                if($request->converteType == 'csv')
+                    echo 'Это я ещё не успел сделать ((( ';
+                if($request->converteType == 'xml')
+                    print_r($this->jsonToXml($contents1));
+                    break;
+            case 'xml':
+                if($request->converteType == 'csv')
+                    echo 'Это я ещё не успел сделать ((( ';
+                if($request->converteType == 'json')
+                    print_r($this->xmlToJson($contents1));
+                        break;
+            case 'csv':
+                if($request->converteType == 'xml')
+                    echo 'Это я ещё не успел сделать ((( ';
+                if($request->converteType == 'json')
+                    $this->csvToJson($contents1);
+                break;
+            default: echo 'Это я ещё не успел сделать ((( ';
 
-            $row=$row+1;
         }
- 
-
-
-
-        // $xml = simplexml_load_string($contents1);
-      //  $json = json_encode($xml);
-
-
-        //    $firstLine = explode ("\r\n",$contents1);
-
-
-       // json_encode($contents1);
-      //  dd($json);
-        //$path = $request->file('avatar')->store('avatars');
-
-       // return $path;
-        //$newFile = Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
-        //dd($path);
 
     }
 
